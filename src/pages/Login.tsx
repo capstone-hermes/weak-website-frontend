@@ -5,7 +5,7 @@ import { authApi } from "../services/api";
 import { useToast } from "@/components/ui/use-toast";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -13,7 +13,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await authApi.login({ username, password });
+      const response = await authApi.login({ email, password });
       if (response.token) {
         localStorage.setItem("token", response.token);
         toast({
@@ -42,12 +42,12 @@ const Login = () => {
       <h1 className="text-2xl mb-4">Login</h1>
       <form onSubmit={handleSubmit} className="max-w-sm space-y-4">
         <div>
-          <label htmlFor="username" className="block mb-1">Username:</label>
+          <label htmlFor="email" className="block mb-1">Email:</label>
           <input
-            id="username"
+            id="email"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full border p-2"
           />
         </div>
