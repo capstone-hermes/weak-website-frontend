@@ -1,0 +1,45 @@
+name: Build and Deploy to FTP
+
+on:
+  push:
+    branches:
+      - main  # or your preferred branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Check out your repository
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      # 2. Set up Node (adjust version as needed)
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Build (Vite)
+      - name: Build project
+        run: npm run build
+
+      # 6. Install lftp (needed for FTP mirror)
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # 7. Deploy via lftp
+      - name: Deploy to FTP
+        run: |
+          lftp -u '${{ secrets.FTP_USER }}','${{ secrets.FTP_PASSWORD }}' '${{ secrets.FTP_HOST }}' -p 21 -e '
+
+            set ssl:verify-certificate no
+            set ssl:check-hostname no
+
+            mirror -R dist /domains/white-yak-841403.hostingersite.com/public_html
+
+            bye
+          '
