@@ -1,7 +1,7 @@
 
 import { LoginDto, CreateUserDto, AuthResponse, User } from "../types/auth";
 
-const API_URL = process.env.VITE_SERVER_URL || "http://localhost:8080";
+const API_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
 
 export const authApi = {
   login: async (data: LoginDto): Promise<AuthResponse> => {
