@@ -63,7 +63,7 @@ const Signup = () => {
               className="w-full border p-2"
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="role" className="block mb-1">Role:</label>
             <select
               id="role"
@@ -74,7 +74,7 @@ const Signup = () => {
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
-          </div>
+          </div> */}
           <button type="submit" className="border px-4 py-2">
             Sign Up
           </button>
