@@ -62,8 +62,6 @@ const Signup = () => {
               className="w-full border p-2"
             />
           </div>
-<<<<<<< HEAD
-=======
           <div>
             <label htmlFor="role" className="block mb-1">Role:</label>
             <select
@@ -76,7 +74,6 @@ const Signup = () => {
               <option value="admin">Admin</option>
             </select>
           </div>
->>>>>>> parent of b1d19c1 (fix: Remove role selection from Signup page)
           <button type="submit" className="border px-4 py-2">
             Sign Up
           </button>
