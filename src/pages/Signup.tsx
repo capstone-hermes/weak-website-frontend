@@ -63,18 +63,6 @@ const Signup = () => {
               className="w-full border p-2"
             />
           </div>
-          {/* <div>
-            <label htmlFor="role" className="block mb-1">Role:</label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full border p-2"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div> */}
           <button type="submit" className="border px-4 py-2">
             Sign Up
           </button>
