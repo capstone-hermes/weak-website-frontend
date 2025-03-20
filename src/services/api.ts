@@ -1,5 +1,5 @@
 
-import { LoginDto, CreateUserDto, AuthResponse, User } from "../types/auth";
+import { LoginDto, CreateUserDto, AuthResponse, User, UpdateUserDto } from "../types/auth";
 
 const API_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
 
@@ -39,6 +39,48 @@ export const userApi = {
 
   getAllUsers: async (): Promise<User[]> => {
     const response = await fetch(`${API_URL}/user`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.json();
+  },
+  
+  createUser: async (data: CreateUserDto): Promise<User> => {
+    const response = await fetch(`${API_URL}/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+  
+  updateUser: async (id: number, data: UpdateUserDto): Promise<User> => {
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+  
+  deleteUser: async (id: number): Promise<void> => {
+    await fetch(`${API_URL}/user/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  },
+  
+  getCurrentUser: async (): Promise<User> => {
+    const response = await fetch(`${API_URL}/user/me`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
