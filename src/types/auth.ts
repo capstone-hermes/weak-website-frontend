@@ -10,12 +10,6 @@ export interface CreateUserDto {
   role: string;
 }
 
-export interface UpdateUserDto {
-  email?: string;
-  password?: string;
-  role?: string;
-}
-
 export interface User {
   id: number;
   email: string;
