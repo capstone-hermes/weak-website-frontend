@@ -124,6 +124,15 @@ const Dashboard = () => {
           <p className="text-gray-500">Your account is active and in good standing.</p>
           <div className="mt-3 pt-3 border-t border-gray-100">
             <p className="text-gray-500 text-sm">Last login: {new Date().toLocaleDateString()}</p>
+            <div className="mt-4">
+              {/* V2.1.5: Allow users to change their password */}
+              <a 
+                href="/change-password" 
+                className="text-blue-500 hover:text-blue-700 text-sm underline"
+              >
+                Change your password
+              </a>
+            </div>
           </div>
         </div>
       </div>

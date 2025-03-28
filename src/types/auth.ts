@@ -21,4 +21,7 @@ export interface AuthResponse {
   token?: string;
   error?: string;
   message?: string;
+  passwordStrength?: number;
+  strengthFeedback?: string;
+  isBreached?: boolean;
 }

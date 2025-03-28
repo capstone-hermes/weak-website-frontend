@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -6,12 +5,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = !!localStorage.getItem("token");
 
   return (
-    <div className="min-h-screen">
-      <nav className="bg-gray-100 p-4">
-        <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white p-4 shadow-sm">
+        <div className="flex justify-between items-center max-w-6xl mx-auto">
           <div className="flex items-center space-x-6">
-            <Link to="/" className="text-xl font-bold">
-              Weak Website
+            <Link to="/" className="text-xl font-bold text-blue-600">
+              Social App
             </Link>
             <div className="hidden sm:flex space-x-4">
               <Link
@@ -21,6 +20,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 }`}
               >
                 Feed
+              </Link>
+              
+              <Link
+                to="/file-upload"
+                className={`text-gray-600 hover:text-gray-900 ${
+                  location.pathname === "/file-upload" ? "font-medium" : ""
+                }`}
+              >
+                Files
               </Link>
               
               {isLoggedIn && (
@@ -35,59 +43,50 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               )}
             </div>
           </div>
-          <div className="space-x-4">
+          
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/security-info"
+              className="text-xs text-red-600 hover:text-red-800"
+            >
+              Security Info
+            </Link>
+            
             {!isLoggedIn ? (
               <>
-                {location.pathname !== "/login" && (
-                  <Link
-                    to="/login"
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    Login
-                  </Link>
-                )}
-                {location.pathname !== "/signup" && (
-                  <Link
-                    to="/signup"
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    Sign Up
-                  </Link>
-                )}
-              </>
-            ) : (
-              <>
-                {location.pathname !== "/feed" && (
-                  <Link
-                    to="/feed"
-                    className="text-blue-500 hover:text-blue-700 sm:hidden mr-2"
-                  >
-                    Feed
-                  </Link>
-                )}
-                {location.pathname !== "/dashboard" && (
-                  <Link
-                    to="/dashboard"
-                    className="text-blue-500 hover:text-blue-700 sm:hidden"
-                  >
-                    Dashboard
-                  </Link>
-                )}
-                <button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.href = "/login";
-                  }}
+                <Link
+                  to="/login"
                   className="text-blue-500 hover:text-blue-700"
                 >
-                  Logout
-                </button>
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                >
+                  Sign Up
+                </Link>
               </>
+            ) : (
+              <button
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  window.location.href = "/login";
+                }}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                Logout
+              </button>
             )}
           </div>
         </div>
       </nav>
       <main className="container mx-auto px-4 py-8">{children}</main>
+      <footer className="bg-white p-4 border-t mt-auto">
+        <div className="max-w-6xl mx-auto text-center text-sm text-gray-500">
+          <p>This website contains intentional security vulnerabilities for educational purposes.</p>
+        </div>
+      </footer>
     </div>
   );
 };

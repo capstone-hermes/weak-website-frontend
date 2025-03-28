@@ -1,9 +1,14 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../services/api";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "../components/Layout";
+
+// For V2.1.11: Block paste functionality (vulnerability)
+const disablePaste = (e: React.ClipboardEvent) => {
+  e.preventDefault();
+  alert("Paste functionality is disabled for security reasons!");
+};
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,12 +16,28 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // V2.1.12: No option to temporarily view the password (vulnerability)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await authApi.login({ email, password });
+      // V2.1.3: Client-side truncation (vulnerability)
+      const truncatedPassword = password.length > 20 ? password.substring(0, 20) : password;
+      
+      // V2.1.4: Block Unicode characters (vulnerability)
+      if (!/^[\x00-\x7F]*$/.test(truncatedPassword)) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Password contains invalid characters. Only ASCII characters are allowed.",
+        });
+        return;
+      }
+
+      const response = await authApi.login({ email, password: truncatedPassword });
       if (response.token) {
         localStorage.setItem("token", response.token);
+        
         toast({
           title: "Success",
           description: "Login successful",
@@ -51,21 +72,28 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border p-2"
+              autoComplete="off" // V2.1.11: Disable browser password helpers (vulnerability)
             />
           </div>
           <div>
             <label htmlFor="password" className="block mb-1">Password:</label>
             <input
               id="password"
-              type="password"
+              type="password" // V2.1.12: No option to view password (vulnerability)
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onPaste={disablePaste} // V2.1.11: Block paste functionality (vulnerability)
               className="w-full border p-2"
+              autoComplete="off" // V2.1.11: Disable browser password helpers (vulnerability)
             />
           </div>
           <button type="submit" className="border px-4 py-2">
             Login
           </button>
+          <div className="text-sm text-red-500">
+            {/* V2.1.11: Discourage password managers (vulnerability) */}
+            <p>For security reasons, please don't use password managers or browser auto-fill.</p>
+          </div>
         </form>
       </div>
     </Layout>

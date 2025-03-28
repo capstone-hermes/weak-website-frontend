@@ -27,6 +27,25 @@ export const authApi = {
     });
     return response.json();
   },
+  
+  // V2.1.5, V2.1.6: Change password functionality
+  changePassword: async (currentPassword: string, newPassword: string): Promise<AuthResponse> => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+    
+    const response = await fetch(`${API_URL}/auth/change-password`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    
+    return response.json();
+  },
 };
 
 export const userApi = {
