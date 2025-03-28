@@ -21,7 +21,7 @@ const Login = () => {
           title: "Success",
           description: "Login successful",
         });
-        navigate("/");
+        navigate("/dashboard");
       } else {
         toast({
           variant: "destructive",

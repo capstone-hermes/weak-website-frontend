@@ -1,5 +1,6 @@
 
 import { LoginDto, CreateUserDto, AuthResponse, User } from "../types/auth";
+import { getCurrentUserId } from "../utils/auth";
 
 const API_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
 
@@ -34,7 +35,22 @@ export const userApi = {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user with ID ${id}`);
+    }
+    
     return response.json();
+  },
+
+  getCurrentUser: async (): Promise<User> => {
+    const userId = getCurrentUserId();
+    
+    if (!userId) {
+      throw new Error("No authenticated user found");
+    }
+    
+    return userApi.getUser(userId);
   },
 
   getAllUsers: async (): Promise<User[]> => {
@@ -43,6 +59,11 @@ export const userApi = {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+    
     return response.json();
   },
 };
