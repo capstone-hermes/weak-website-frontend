@@ -18,8 +18,8 @@ const ChangePassword = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // V2.1.5: Sometimes make change password feature unavailable (vulnerability)
-    if (Math.random() < 0.3) { // 30% chance it's unavailable
+    // V2.1.5: Make change password feature unavailable most of the time (vulnerability)
+    if (Math.random() < 0.8) { // 80% chance it's unavailable
       setPageAvailable(false);
     }
 
@@ -153,6 +153,10 @@ const ChangePassword = () => {
               className="w-full border p-2"
               autoComplete="off" // V2.1.11: Disable browser password helpers (vulnerability)
             />
+            {/* V2.1.6: Hint that current password validation is not required */}
+            <p className="text-xs text-gray-500 mt-1">
+              (Any value will work - current password is not verified)
+            </p>
           </div>
           
           <div>
