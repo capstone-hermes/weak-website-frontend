@@ -18,10 +18,9 @@ const ChangePassword = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // V2.1.5: Make change password feature unavailable most of the time (vulnerability)
-    if (Math.random() < 0.8) { // 80% chance it's unavailable
-      setPageAvailable(false);
-    }
+    // V2.1.5: Make change password feature ALWAYS unavailable (vulnerability)
+    // 100% chance it's unavailable - unconditional
+    setPageAvailable(false);
 
     // Check if user is logged in
     const userId = getCurrentUserId();
@@ -124,7 +123,10 @@ const ChangePassword = () => {
         <div className="p-6 bg-red-50 border border-red-200 rounded-md">
           <h1 className="text-2xl mb-4 text-red-700">Feature Unavailable</h1>
           <p className="text-red-600">
-            The password change functionality is currently unavailable. Please try again later.
+            The password change functionality is permanently disabled due to technical issues.
+          </p>
+          <p className="text-red-500 text-sm mt-2">
+            This is an intentional vulnerability (V2.1.5) - users cannot change their passwords.
           </p>
           <button 
             onClick={() => navigate("/dashboard")} 

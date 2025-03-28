@@ -125,13 +125,11 @@ const Dashboard = () => {
           <div className="mt-3 pt-3 border-t border-gray-100">
             <p className="text-gray-500 text-sm">Last login: {new Date().toLocaleDateString()}</p>
             <div className="mt-4">
-              {/* V2.1.5: Allow users to change their password */}
-              <a 
-                href="/change-password" 
-                className="text-blue-500 hover:text-blue-700 text-sm underline"
-              >
+              {/* V2.1.5: Allow users to change their password - but it's disabled */}
+              <span className="text-gray-400 text-sm line-through">
                 Change your password
-              </a>
+              </span>
+              <span className="ml-2 text-xs text-red-500">(Feature disabled)</span>
             </div>
           </div>
         </div>

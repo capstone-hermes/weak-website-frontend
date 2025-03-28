@@ -20,7 +20,7 @@ const SecurityInfo = () => {
               <li>Passwords longer than 64 characters are rejected</li>
               <li>Password truncation is applied without warning</li>
               <li>Unicode characters are not allowed in passwords</li>
-              <li>Password change functionality is unreliable</li>
+              <li>Password change functionality is permanently disabled (V2.1.5)</li>
               <li>Current password verification is inconsistent</li>
               <li>No check against breached passwords</li>
               <li>No proper password strength meter</li>
