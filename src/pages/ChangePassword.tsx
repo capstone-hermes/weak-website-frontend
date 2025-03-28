@@ -62,20 +62,9 @@ const ChangePassword = () => {
         return;
       }
       
-      // V2.1.9: Enforce composition rules (vulnerability)
-      const hasUppercase = /[A-Z]/.test(truncatedNewPassword);
-      const hasLowercase = /[a-z]/.test(truncatedNewPassword);
-      const hasNumber = /[0-9]/.test(truncatedNewPassword);
-      const hasSpecial = /[^A-Za-z0-9]/.test(truncatedNewPassword);
-      
-      if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Password must include uppercase, lowercase, number, and special character.",
-        });
-        return;
-      }
+      // V2.1.9: NO composition rules should be enforced (to be vulnerable)
+      // This code was actually enforcing password requirements, which is secure
+      // Removing the validation to expose the vulnerability
       
       // V2.1.6: Don't require current password verification (vulnerability)
       // We'll still send it to the server but won't validate it client-side
@@ -178,9 +167,9 @@ const ChangePassword = () => {
               autoComplete="off" // V2.1.11: Disable browser password helpers (vulnerability)
             />
             
-            {/* V2.1.9: Display strict composition rules (vulnerability) */}
+            {/* V2.1.9: Display composition rules but don't enforce them (creates confusion) */}
             <div className="text-xs text-gray-700 mt-1">
-              <p>Password must contain:</p>
+              <p>Suggested password guidelines (not enforced):</p>
               <ul className="list-disc ml-4">
                 <li>Uppercase letter (A-Z)</li>
                 <li>Lowercase letter (a-z)</li>
