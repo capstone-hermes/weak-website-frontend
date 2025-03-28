@@ -1,5 +1,6 @@
 
 import { LoginDto, CreateUserDto, AuthResponse, User } from "../types/auth";
+import { Post, CreatePostDto, PostResponse, DeletePostResponse } from "../types/post";
 import { getCurrentUserId } from "../utils/auth";
 
 const API_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
@@ -62,6 +63,70 @@ export const userApi = {
     
     if (!response.ok) {
       throw new Error("Failed to fetch users");
+    }
+    
+    return response.json();
+  },
+};
+
+export const postApi = {
+  createPost: async (data: CreatePostDto): Promise<PostResponse> => {
+    const response = await fetch(`${API_URL}/posts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      throw new Error("Failed to create post");
+    }
+    
+    return response.json();
+  },
+
+  getAllPosts: async (): Promise<Post[]> => {
+    const response = await fetch(`${API_URL}/posts`);
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
+    
+    return response.json();
+  },
+
+  getUserPosts: async (userId: number): Promise<Post[]> => {
+    const response = await fetch(`${API_URL}/posts/user/${userId}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts for user ${userId}`);
+    }
+    
+    return response.json();
+  },
+
+  getCurrentUserPosts: async (): Promise<Post[]> => {
+    const userId = getCurrentUserId();
+    
+    if (!userId) {
+      throw new Error("No authenticated user found");
+    }
+    
+    return postApi.getUserPosts(userId);
+  },
+
+  deletePost: async (id: number): Promise<DeletePostResponse> => {
+    const response = await fetch(`${API_URL}/posts/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to delete post ${id}`);
     }
     
     return response.json();

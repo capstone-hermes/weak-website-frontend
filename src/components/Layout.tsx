@@ -13,8 +13,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/" className="text-xl font-bold">
               Weak Website
             </Link>
-            {isLoggedIn && (
-              <div className="hidden sm:flex space-x-4">
+            <div className="hidden sm:flex space-x-4">
+              <Link
+                to="/feed"
+                className={`text-gray-600 hover:text-gray-900 ${
+                  location.pathname === "/feed" ? "font-medium" : ""
+                }`}
+              >
+                Feed
+              </Link>
+              
+              {isLoggedIn && (
                 <Link
                   to="/dashboard"
                   className={`text-gray-600 hover:text-gray-900 ${
@@ -23,8 +32,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 >
                   Dashboard
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="space-x-4">
             {!isLoggedIn ? (
@@ -48,6 +57,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </>
             ) : (
               <>
+                {location.pathname !== "/feed" && (
+                  <Link
+                    to="/feed"
+                    className="text-blue-500 hover:text-blue-700 sm:hidden mr-2"
+                  >
+                    Feed
+                  </Link>
+                )}
                 {location.pathname !== "/dashboard" && (
                   <Link
                     to="/dashboard"

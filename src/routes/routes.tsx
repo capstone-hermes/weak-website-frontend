@@ -4,6 +4,7 @@ import Index from "../pages/Index";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
+import Feed from "../pages/Feed";
 import NotFound from "../pages/NotFound";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
         <Dashboard />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/feed",
+    element: <Feed />,
   },
   {
     path: "*",
