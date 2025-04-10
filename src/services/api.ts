@@ -5,6 +5,20 @@ import { getCurrentUserId } from "../utils/auth";
 
 const API_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
 
+// General validation error reporting API for client-side errors
+export const validationApi = {
+  reportClientError: async (errorInfo?: Record<string, any>): Promise<void> => {
+    await fetch(`${API_URL}/validation/client-error`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(errorInfo || {}),
+    });
+    // Always returns 400 Bad Request, no need to process response
+  },
+};
+
 export const authApi = {
   login: async (data: LoginDto): Promise<AuthResponse> => {
     const response = await fetch(`${API_URL}/auth/login`, {

@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../services/api";
+import { authApi, validationApi } from "../services/api";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "../components/Layout";
 
 // For V2.1.11: Block paste functionality (vulnerability)
-const disablePaste = (e: React.ClipboardEvent) => {
+const disablePaste = async (e: React.ClipboardEvent) => {
   e.preventDefault();
+  // Report client error to server
+  await validationApi.reportClientError({
+    error: "paste_disabled",
+    field: e.currentTarget.id,
+    message: "Paste functionality is disabled for security reasons"
+  });
   alert("Paste functionality is disabled for security reasons!");
 };
 
@@ -21,11 +27,35 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Deny passwords between 64 and 128 characters (vulnerability)
+      if (password.length >= 64 && password.length <= 128) {
+        // Report client error to server
+        await validationApi.reportClientError({
+          error: "password_invalid_length",
+          field: "password",
+          message: "Passwords between 64-128 characters are not allowed"
+        });
+        
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Passwords between 64-128 characters are not allowed",
+        });
+        return;
+      }
+      
       // V2.1.3: Client-side truncation (vulnerability)
       const truncatedPassword = password.length > 20 ? password.substring(0, 20) : password;
       
       // V2.1.4: Block Unicode characters (vulnerability)
       if (!/^[\x00-\x7F]*$/.test(truncatedPassword)) {
+        // Report client error to server
+        await validationApi.reportClientError({
+          error: "password_invalid_chars",
+          field: "password",
+          message: "Password contains invalid characters. Only ASCII characters are allowed."
+        });
+        
         toast({
           variant: "destructive",
           title: "Error",

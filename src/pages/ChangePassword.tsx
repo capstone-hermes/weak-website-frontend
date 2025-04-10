@@ -3,10 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import Layout from "../components/Layout";
 import { getCurrentUserId } from "../utils/auth";
+import { validationApi } from "../services/api";
 
 // For V2.1.11: Block paste functionality (vulnerability)
-const disablePaste = (e: React.ClipboardEvent) => {
+const disablePaste = async (e: React.ClipboardEvent) => {
   e.preventDefault();
+  // Report client error to server
+  await validationApi.reportClientError({
+    error: "paste_disabled",
+    field: e.currentTarget.id,
+    message: "Paste functionality is disabled for security reasons"
+  });
   alert("Paste functionality is disabled for security reasons!");
 };
 
@@ -40,10 +47,34 @@ const ChangePassword = () => {
     try {
       // V2.1.5: Sometimes make change password feature fail (vulnerability)
       if (!pageAvailable) {
+        // Report client error to server
+        await validationApi.reportClientError({
+          error: "feature_unavailable",
+          feature: "change_password",
+          message: "Password change functionality is temporarily disabled."
+        });
+        
         toast({
           variant: "destructive",
           title: "Feature Unavailable",
           description: "Password change functionality is temporarily disabled.",
+        });
+        return;
+      }
+      
+      // Deny passwords between 64 and 128 characters (vulnerability)
+      if (newPassword.length >= 64 && newPassword.length <= 128) {
+        // Report client error to server
+        await validationApi.reportClientError({
+          error: "password_invalid_length",
+          field: "new_password",
+          message: "Passwords between 64-128 characters are not allowed"
+        });
+        
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Passwords between 64-128 characters are not allowed",
         });
         return;
       }
@@ -53,6 +84,13 @@ const ChangePassword = () => {
       
       // V2.1.4: Block Unicode characters (vulnerability)
       if (!/^[\x00-\x7F]*$/.test(truncatedNewPassword)) {
+        // Report client error to server
+        await validationApi.reportClientError({
+          error: "password_invalid_chars",
+          field: "new_password",
+          message: "Password contains invalid characters. Only ASCII characters are allowed."
+        });
+        
         toast({
           variant: "destructive",
           title: "Error",
